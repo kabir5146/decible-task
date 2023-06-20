@@ -90,45 +90,6 @@ const DataPage = () => {
 
         {/* pagination is here */}
         <div className="">
-          {/* <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "1rem",
-                  color: "white",
-                  marginTop: "50px",
-                }}
-              >
-                <Button
-                  title="previous"
-                  type="text"
-                  shape="default"
-                  icon={<LeftOutlined style={{ fontSize: "10px" }} />}
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                />
-                {[...Array(totalPages).keys()].map((page) => (
-                  <Button
-                    key={page + 1}
-                    type="text"
-                    shape="default"
-                    size="small"
-                    onClick={() => handlePageChange(page + 1)}
-                    disabled={currentPage === page + 1}
-                  >
-                    {page + 1}
-                  </Button>
-                ))}
-                <Button
-                  title="next"
-                  type="text"
-                  shape="default"
-                  icon={<RightOutlined style={{ fontSize: "10px" }} />}
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                />
-              </div> */}
           <div
             style={{
               display: "flex",
