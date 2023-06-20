@@ -227,3 +227,8 @@
     transform: rotate(0deg);
   }
 }
+.table {
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border: 1px solid #c1c1c179;
+}
