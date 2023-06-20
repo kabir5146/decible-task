@@ -32,7 +32,7 @@ export const dataSource = [
     to: "+33166114113",
     via: "+33148288105",
     createdAt: "12-082022",
-    status: "Unarchive",
+    status: "Archived",
   },
   {
     callType: "Voice Mail",
@@ -65,7 +65,7 @@ export const dataSource = [
     to: "+33166114113",
     via: "+33148288105",
     createdAt: "12-082022",
-    status: "Unarchive",
+    status: "Archived",
   },
   {
     callType: "Voice Mail",
@@ -98,7 +98,7 @@ export const dataSource = [
     to: "+33166114113",
     via: "+33148288105",
     createdAt: "12-082022",
-    status: "Unarchive",
+    status: "Archived",
   },
 ];
 
