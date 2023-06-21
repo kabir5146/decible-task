@@ -137,7 +137,7 @@ export const columns = [
     render: (text: any, record: any) => (
       <>
         <p>{`${Math.floor(text / 60)} minutes and ${text % 60} seconds`}</p>
-        <p style={{ color: "#9144ef" }}>{text}</p>
+        <p style={{ color: "#9144ef" }}>{`(${text} seconds)`}</p>
       </>
     ),
   },
@@ -163,7 +163,7 @@ export const columns = [
     title: "CREATED AT",
     dataIndex: "created_at",
     key: "created_at",
-    render: (text: any) => <span>{text}</span>,
+    render: (text: any) => <span>{`${new Date(text).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, '-')}`}</span>,
   },
   {
     title: "STATUS",
