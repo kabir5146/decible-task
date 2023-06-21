@@ -4,6 +4,8 @@ import { DownOutlined } from "@ant-design/icons";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { columns, dataSource } from "@/utils/statics";
+import { useQuery } from "@apollo/client";
+import { CALLS_QUERY } from "@/mutation/callMutation";
 
 const DataPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -12,6 +14,21 @@ const DataPage = () => {
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
+
+  const {loading,error,data}:any = useQuery(CALLS_QUERY,{
+    variables: {
+      page:2,
+      limit:20,
+    },
+  })
+  console.log("🚀 ~ file: home.tsx:32 ~ HomePage ~ data:", data?.paginatedCalls)
+  if(loading) return <h1>Loading</h1>
+   if(error){
+       console.log(error.message)
+   }
+   if(data?.quotes?.length == 0){
+    return  <h2>No Quotes available</h2>
+   }
   return (
     <main className={`${styles.main}`}>
       <div>
@@ -82,7 +99,7 @@ const DataPage = () => {
         </div>
         {/* table is here  */}
         <Table
-          dataSource={dataSource}
+          dataSource={data?.paginatedCalls?.nodes}
           columns={columns}
           className={styles.table}
           pagination={false}
@@ -108,9 +125,9 @@ const DataPage = () => {
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
             />
-            {Array(totalPages).map((page) => (
+            {Array(totalPages).map((page,i) => (
               <Button
-                key={page + 1}
+                key={i}
                 type="text"
                 shape="default"
                 size="small"

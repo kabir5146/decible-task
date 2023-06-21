@@ -1,23 +1,44 @@
 import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
+import { useMutation } from "@apollo/client";
+import { LOGIN_MUTATION } from "@/mutation/loginMutation";
+import { useRouter } from "next/router";
 
 const SignInPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [UserName, setUserName] = useState('String!');
+  const [password, setPassword] = useState('String!');
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const router = useRouter();
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+  
+
+  const handleLogin = async (event:any) => {
+    // event?.preventDefault();
+  
+  try {
+    const { data } = await login({
+      variables: {
+        input: {
+          username: UserName,
+          password: password,
+        },
+      },
+    });
+
+    // Handle successful login
+    const { access_token } = data.login;
+    console.log("🚀 ~ file: Loginform.tsx:82 ~ handleLogin ~ access_token:", access_token)
+    localStorage.setItem('accessToken', access_token);
+    if( access_token){
+      router.push('/'+1213);
+    }
+    // Store access token in localStorage or state
+  } catch (error) {
+    // Handle login error
+  }
+};
 
   return (
     <div
@@ -36,12 +57,12 @@ const SignInPage = () => {
           background: "#c1c1c1",
         }}
       >
-        <Form layout="vertical" onFinish={handleSubmit}>
-          <Form.Item label="Email">
-            <Input type="email" value={email} onChange={handleEmailChange} />
+        <Form layout="vertical" onFinish={handleLogin}>
+          <Form.Item label="UserName">
+            <Input type="text" value={UserName} onChange={(e)=>setUserName(e.target.value)} />
           </Form.Item>
           <Form.Item label="Password">
-            <Input.Password value={password} onChange={handlePasswordChange} />
+            <Input.Password value={password} onChange={(e)=>setPassword(e.target.value)} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">

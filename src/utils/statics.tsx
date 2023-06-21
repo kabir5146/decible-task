@@ -106,15 +106,15 @@ export const columns = [
   // 1st column
   {
     title: "CALL TYPE",
-    dataIndex: "callType",
-    key: "callType",
+    dataIndex: "call_type",
+    key: "call_type",
     render: (text: any, record: any) => (
       <span
         style={{
           color:
-            record.callType === "Missed"
+            record.call_type.toLowerCase() === "Missed".toLowerCase()
               ? "#ef4444"
-              : record.callType === "Voice Mail"
+              : record.call_type.toLowerCase() === "Voice Mail".toLowerCase()
               ? "#9144ef"
               : "#18ffc9",
         }}
@@ -136,8 +136,8 @@ export const columns = [
     key: "duration",
     render: (text: any, record: any) => (
       <>
-        <p>{text}</p>
-        <p style={{ color: "#9144ef" }}>{record.durationSeconds}</p>
+        <p>{`${Math.floor(text / 60)} minutes and ${text % 60} seconds`}</p>
+        <p style={{ color: "#9144ef" }}>{text}</p>
       </>
     ),
   },
@@ -161,24 +161,25 @@ export const columns = [
   },
   {
     title: "CREATED AT",
-    dataIndex: "createdAt",
-    key: "createdAt",
+    dataIndex: "created_at",
+    key: "created_at",
     render: (text: any) => <span>{text}</span>,
   },
   {
     title: "STATUS",
-    dataIndex: "status",
-    key: "status",
+    dataIndex: "is_archived",
+    key: "is_archived",
     render: (text: any, record: any) => (
+
       <Button
         style={{
-          color: record.callType === "Answered" ? "#000000" : "#18ffc9",
+          color: !text ? "#000000" : "#18ffc9",
           background:
-            record.callType === "Answered" ? "#bdbdbd4c" : "#60ffef2a",
+            !text ? "#bdbdbd4c" : "#60ffef2a",
           border: 0,
         }}
       >
-        {text}
+        {text ? 'Archived' : 'unarchive'}
       </Button>
     ),
   },
