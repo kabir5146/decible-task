@@ -2,33 +2,47 @@ import styles from "@/styles/Home.module.css";
 import { Table, Button, Typography, Row, Col } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { columns, dataSource } from "@/utils/statics";
 import { useQuery } from "@apollo/client";
 import { CALLS_QUERY } from "@/mutation/callMutation";
+import { useRouter } from "next/router";
 
 const DataPage = () => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 10;
+  const router = useRouter()
+  const [currentPage, setCurrentPage] = useState(1);
+  const [calls,setCalls] = useState([]);
+  console.log("🚀 ~ file: index.tsx:12 ~ DataPage ~ currentPage:", calls)
+
 
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
+    refetch();
+    // router.reload
   };
 
-  const {loading,error,data}:any = useQuery(CALLS_QUERY,{
+  const {loading,error,data,refetch}:any = useQuery(CALLS_QUERY,{
     variables: {
-      page:2,
-      limit:20,
+      offset: (currentPage - 2) * 10,
+      limit:10,
     },
   })
-  console.log("🚀 ~ file: home.tsx:32 ~ HomePage ~ data:", data?.paginatedCalls)
-  if(loading) return <h1>Loading</h1>
+  // console.log("🚀 ~ file: home.tsx:32 ~ HomePage ~ data:",data?.paginatedCalls?.nodes)
+  if(loading) return <h1>Loading...</h1>
    if(error){
        console.log(error.message)
    }
    if(data?.quotes?.length == 0){
     return  <h2>No Quotes available</h2>
    }
+
+  //  useEffect(() => {
+  //   refetch({ page: currentPage });
+  // }, [currentPage, refetch]);
+ 
+    
+ 
+
   return (
     <main className={`${styles.main}`}>
       <div>
@@ -125,21 +139,21 @@ const DataPage = () => {
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
             />
-            {Array(totalPages).map((page,i) => (
+            {[...Array(Math.floor(data?.paginatedCalls?.totalCount/10 || 10))].map((page,i) => (
               <Button
                 key={i}
                 type="text"
                 shape="default"
                 size="small"
-                onClick={() => handlePageChange(page + 1)}
-                disabled={currentPage === page + 1}
+                onClick={() => handlePageChange(i + 1)}
+                disabled={currentPage === i+1 }
                 style={{
                   background:
-                    currentPage === page + 1 ? "black" : "transparent",
-                  color: currentPage === page + 1 ? "white" : "black",
+                    currentPage === i + 1 ? "black" : "transparent",
+                  color: currentPage === i + 1 ? "white" : "black",
                 }}
               >
-                {page + 1}
+                {i + 1}
               </Button>
             ))}
             <Button
@@ -147,14 +161,16 @@ const DataPage = () => {
               type="text"
               shape="default"
               icon={<RightOutlined style={{ fontSize: "10px" }} />}
-              disabled={currentPage === totalPages}
+              disabled={currentPage === Math.floor(data?.paginatedCalls?.totalCount/10 || 10)}
               onClick={() => handlePageChange(currentPage + 1)}
             />
           </div>
           <Row justify="center" style={{ marginTop: "8px" }}>
             <Col>
               <Typography.Text style={{ textAlign: "center" }}>
-                1 - 10 of 25 results
+                1 - {Math.floor(data?.paginatedCalls?.totalCount/10 || 10)} of 
+                
+                {data?.paginatedCalls?.totalCount} results
               </Typography.Text>
             </Col>
           </Row>
