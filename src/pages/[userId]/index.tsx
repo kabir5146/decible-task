@@ -18,16 +18,17 @@ const DataPage = () => {
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
     refetch();
-    // router.reload
   };
-
+ useEffect(() => {
+    refetch({ page: currentPage });
+  }, [currentPage,]);
   const {loading,error,data,refetch}:any = useQuery(CALLS_QUERY,{
     variables: {
       offset: (currentPage - 2) * 10,
       limit:10,
     },
   })
-  // console.log("🚀 ~ file: home.tsx:32 ~ HomePage ~ data:",data?.paginatedCalls?.nodes)
+  console.log("🚀 ~ file: home.tsx:32 ~ HomePage ~ data:",data?.paginatedCalls?.nodes)
   if(loading) return <h1>Loading...</h1>
    if(error){
        console.log(error.message)
@@ -36,9 +37,7 @@ const DataPage = () => {
     return  <h2>No Quotes available</h2>
    }
 
-  //  useEffect(() => {
-  //   refetch({ page: currentPage });
-  // }, [currentPage, refetch]);
+  
  
     
  
